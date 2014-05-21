@@ -1,0 +1,71 @@
+les clé ce trouve a :
+5d9 : (ici valeur = ) 31h 
+610: (pareil)a6h
+646: (pareil etc)0F4h
+679: 42h
+6c7: 0C8
+6fe: 91h 
+0x1042 l(adresse de la chaine que j'appelrais sha1 qui change aussi d'un telechargement a l'autre du fichier 
+le pseudo dans ce code c'est rooxy et aprés une execution avec gdb voila ce que j'en deduit 
+
+1/
+ 5 xor 1er byte changeant (ici resultat 34) 
+ and 34 0x3f (ne change rien) 
+ charge sha1
+ avance de eax case dans sha1 pour selectionner une partie d sha1 
+ on prend le premier caractére du sha1 ici "A" dans edx
+ compare ce 'A' a notre premiere lettre du passe 
+*/
+fait la somme des hexa des caractére du passe word dans eax
+2/
+les 2 dernier nombre de eax(al) qui est le resultat de la somme ... xor 2eme byte changeant 
+and 2e7(ici),0x3f ( on a garder juste les 2 dernier e7) 
+charge sha1 dans ebx
+on add eax a la sha1 donc pour avancer ici de 27 
+on prend le premier caractére du nouveau sha1 ici "v" dans edx 
+compare ce 'v' a notre 2eme caractére du pass 
+/*
+prend le premier caractére du pseudo dans ebx et fait and 0xff
+premier caractére en hexa * 1 puis dans eax
+2éme caractére multiplier fois notre variable somme et du resultat on garde les 2 dernier (and 0xff) 
+ainsi de suite pour tout les caractére 
+3/
+le resultat de la multipl xor 3éme byte changeant 
+and 51(ici),0xff devient 11 (17 en hexa)dans eax
+on charge donc sha1 , on avance de 17 caractére (on prend celui d'apré les 17) 
+on le met dans edx, ici c'est "x" 
+et on le compare a notre 3éme caractére du pass 
+/*met le premier caractére du pseudo dans eax
+compare le premier caractére et le 2éme caractére qui ce trouve dans ebx 
+si 2éme caractére inférieur a premiére caractére alors on fait rien sinon on le met dans eax(choix du max) 
+4/
+le max(y/79 ici ) xor 4éme byte changeant 
+donne 2E on le push 
+on génére un nombre aléatoire avec rand, et on prend le dernier chiffre (unité) grace au xor 0x3f
+on charge la sha1 et on avance de eax case ici 5 donc on prend le 6éme caractére ici 'S'dans eedx
+on compare S a notre 4éme caractére du pass 
+/*
+premier caractére du pseudo au carré dans eax et ebx
+and ebx 0xff pour garder juste les 2 dernier chiffre du carré(transforme en octet)  
+2éme caractére du pseudo au carréer , on ajoute ebx notre variable somme et le carrée du 2éme caractére
+puis on transforme en octet dans ebx 
+pareil pour les autes caractére 
+5/
+le resultat des multiplication adition conversion ixi 77 xor 5éme byte changeant 
+le resultat and 0x3f pour garder l'unité (transformation octet ? ) dans eax
+on génére la sha1 on lui ajoute C pour avancer de 12 case pour prendre la 13éme qui est "W"
+on met W dans edx et on compare a notre 5éme caractére du pass 
+/*
+met le premiére caractére du pseudo dans edx le push et appel une fonction 
+le premiére caractére r etant 72 en hexa, il va faire une boucle de 72 fois generer un random 
+le resultat random dans eax and 0xff pour prendre les 2 dernier (transformation en octect ) 
+ici al(A7) xor 6éme et dernier byte changeant 
+and 0x3f( la valeur est passer de E8 a 28) 
+on gnerae sha1 et on lui ajoute 28 pour tomber sur "k" qu'on comparaera au dernier caractére du passe
+
+
+
+
+
+ 
+
